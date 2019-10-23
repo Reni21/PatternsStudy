@@ -8,11 +8,9 @@ import java.util.List;
 public abstract class Character {
     private List<Class> validMovementStrategies;
     private String name;
-    private Gender gender;
 
-    public Character(String name, Gender gender, List<Class> validMovementStrategies) {
+    public Character(String name, List<Class> validMovementStrategies) {
         this.name = name;
-        this.gender = gender;
         this.validMovementStrategies = validMovementStrategies;
     }
 
@@ -32,7 +30,4 @@ public abstract class Character {
         return name;
     }
 
-    public Gender getGender() {
-        return gender;
-    }
 }

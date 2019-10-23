@@ -11,7 +11,7 @@ import java.util.*;
 public class GameWorldApp {
     private CharacterService characterService;
 
-    public GameWorldApp(CharacterService characterService) {
+    private GameWorldApp(CharacterService characterService) {
         this.characterService = characterService;
     }
 
@@ -55,24 +55,24 @@ public class GameWorldApp {
         );
     }
 
-    public static List<Character> initCharacters() {
+    private static List<Character> initCharacters() {
         List<Character> characters = new LinkedList<>();
-        characters.add(new Vampire("Dracula", Gender.MALE, Arrays.asList(
+        characters.add(new Vampire("Dracula", Arrays.asList(
                 RunMovementStrategy.class,
                 FlyingOnWingsMovementStrategy.class,
                 SimpleWalkingMovementStrategy.class)));
-        characters.add(new Wizard("Volan De Mort", Gender.MALE, Arrays.asList(
+        characters.add(new Wizard("Volan De Mort", Arrays.asList(
                 RunMovementStrategy.class,
                 MagicSwimmingMovementStrategy.class,
                 MagicFlyingMovementStrategy.class,
                 SimpleWalkingMovementStrategy.class,
                 HorseRidingMovementStrategy.class)));
-        characters.add(new Mermaid("Ursula", Gender.FEMALE, Arrays.asList(
+        characters.add(new Mermaid("Ursula", Arrays.asList(
                 SimpleSwimmingMovementStrategy.class)));
-        characters.add(new Troll("Butcher", Gender.BIGENDER, Arrays.asList(
+        characters.add(new Troll("Butcher", Arrays.asList(
                 RunMovementStrategy.class,
                 SimpleWalkingMovementStrategy.class)));
-        characters.add(new Knight("Artur", Gender.MALE, Arrays.asList(
+        characters.add(new Knight("Artur", Arrays.asList(
                 RunMovementStrategy.class,
                 SimpleSwimmingMovementStrategy.class,
                 SimpleWalkingMovementStrategy.class,
