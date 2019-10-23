@@ -25,15 +25,14 @@ public class GameWorldApp {
     private void runGameWorldApp(List<Character> characters, Scanner scanner) {
         printCharactersList(characters);
 
-        int input = -1;
+        int inputCharacterNumber = -1;
         while (true) {
             try {
-                input = Integer.parseInt(scanner.nextLine());
-                characterService.moveCharacter(characters.get(input), scanner);
-                System.out.println("\nChoose character:");
+                inputCharacterNumber = Integer.parseInt(scanner.nextLine());
+                characterService.moveCharacter(characters.get(inputCharacterNumber), scanner);
 
             } catch (IndexOutOfBoundsException e) {
-                System.out.format("Missing character with such number \"%s\"%n", input);
+                System.out.format("Missing character with such number \"%s\"%n", inputCharacterNumber);
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input format. Use only numbers for input.");
             } catch (IllegalArgumentException e) {
@@ -42,16 +41,18 @@ public class GameWorldApp {
                 e.printStackTrace();
                 System.exit(-1);
             }
+            System.out.println("\nChoose character:");
         }
     }
 
     private void printCharactersList(List<Character> characters) {
         System.out.println("Choose character:");
-        int numberOfCharacters = characters.size();
-        for (int i = 0; i < numberOfCharacters; i++) {
-            Character character = characters.get(i);
-            System.out.println(i + " - " + character.getClass().getSimpleName() + " " + character.getName());
-        }
+        characters.forEach(character -> {
+                    int index = characters.indexOf(character);
+                    String characterClazz = character.getClass().getSimpleName();
+                    System.out.format("%d - %s %s%n", index, characterClazz, character.getName());
+                }
+        );
     }
 
     public static List<Character> initCharacters() {

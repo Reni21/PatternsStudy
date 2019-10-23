@@ -14,7 +14,7 @@ public class CharacterService {
 
     public void moveCharacter(Character character, Scanner scanner) throws IllegalStrategyException {
         List<Class> validStrategies = character.getValidMovementStrategies();
-        int input = -1;
+        int inputStrategyNumber = -1;
 
         try {
             int numberOfMovementStrategies = validStrategies.size();
@@ -24,30 +24,32 @@ public class CharacterService {
                 return;
             }
 
-            input = getUserInputStrategyNum(validStrategies, scanner);
-            Class clazz = validStrategies.get(input);
-            MovementStrategy strategy = MOVEMENT_STRATEGIES.get(clazz);
-            validateStrategy(strategy, clazz);
-            character.move(MOVEMENT_STRATEGIES.get(clazz));
+            inputStrategyNumber = getUserInputStrategyNum(validStrategies, scanner);
+            Class strategyClazz = validStrategies.get(inputStrategyNumber);
+            MovementStrategy strategy = MOVEMENT_STRATEGIES.get(strategyClazz);
+            validateStrategy(strategy, strategyClazz);
+            character.move(MOVEMENT_STRATEGIES.get(strategyClazz));
 
         } catch (IndexOutOfBoundsException e) {
-            throw new IllegalArgumentException(String.format("Missing strategy with such number \"%s\"", input));
+            throw new IllegalArgumentException(String.format("Missing strategy with such number \"%s\"", inputStrategyNumber));
         }
     }
 
-    private void validateStrategy(MovementStrategy strategy, Class clazz) {
+    private void validateStrategy(MovementStrategy strategy, Class strategyClazz) {
         if (strategy == null) {
-            throw new IllegalArgumentException("MOVEMENT_STRATEGIES map does not contain strategy class=" + clazz.getName());
+            throw new IllegalArgumentException("MOVEMENT_STRATEGIES map does not contain strategy class=" + strategyClazz.getName());
         }
     }
 
     private int getUserInputStrategyNum(List<Class> validStrategies, Scanner scanner) {
         int numberOfMovementStrategies = validStrategies.size();
         System.out.println("Choose number of character movement strategy:");
-        for (int i = 0; i < numberOfMovementStrategies; i++) {
-            MovementStrategy strategy = MOVEMENT_STRATEGIES.get(validStrategies.get(i));
-            System.out.println(i + " - " + strategy.getSimpleName());
-        }
+        validStrategies.forEach(clazz -> {
+                    int index = validStrategies.indexOf(clazz);
+                    String strategyName = MOVEMENT_STRATEGIES.get(clazz).getSimpleName();
+                    System.out.format("%d - %s%n", index, strategyName);
+                }
+        );
         int strategyNum = Integer.parseInt(scanner.nextLine());
         if (strategyNum >= numberOfMovementStrategies || strategyNum < 0) {
             throw new IllegalArgumentException(String.format("Missing strategy with such number \"%s\"%n", strategyNum));
