@@ -1,13 +1,13 @@
 package reni.com.task06.entity;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Publisher {
-    private List<PostOffice> postOffices = new LinkedList<>();
+    private List<PostOffice> postOffices = new ArrayList<>();
 
     public List<PostOffice> getPostOffices() {
         return postOffices;
@@ -22,15 +22,15 @@ public class Publisher {
     }
 
     public void publishNewspaperIssue(String issueName) {
-        publishNewEvents(PressType.NEWSPAPER, () -> new Newspaper(issueName));
+        publishNewPress(PressType.NEWSPAPER, () -> new Newspaper(issueName));
     }
 
     public void publishMagazineIssue(String issueName) {
-        publishNewEvents(PressType.MAGAZINE, () -> new Magazine(issueName));
+        publishNewPress(PressType.MAGAZINE, () -> new Magazine(issueName));
 
     }
 
-    private void publishNewEvents(PressType pressType, Supplier<Press> pressSupplier) {
+    private void publishNewPress(PressType pressType, Supplier<Press> pressSupplier) {
         postOffices.stream()
                 .filter(postOffice -> postOffice.subscribersCount(pressType) > 0)
                 .forEach(postOffice -> {
@@ -39,7 +39,7 @@ public class Publisher {
                 });
     }
 
-    private List<Press> buildNewPressList(int count, Supplier<Press> eventSupplier) {
-        return IntStream.range(0, count).mapToObj(i -> eventSupplier.get()).collect(Collectors.toList());
+    private List<Press> buildNewPressList(int count, Supplier<Press> pressSupplier) {
+        return IntStream.range(0, count).mapToObj(i -> pressSupplier.get()).collect(Collectors.toList());
     }
 }
