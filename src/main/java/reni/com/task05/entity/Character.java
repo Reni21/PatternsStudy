@@ -9,7 +9,7 @@ public abstract class Character {
     private List<Class<? extends MovementStrategy>> validMovementStrategies;
     private String name;
 
-    public Character(String name, List<Class<? extends MovementStrategy>> validMovementStrategies) {
+    Character(String name, List<Class<? extends MovementStrategy>> validMovementStrategies) {
         this.name = name;
         this.validMovementStrategies = validMovementStrategies;
     }

@@ -12,7 +12,11 @@ import java.util.stream.Stream;
 public class CharacterService {
     public static final Map<Class, MovementStrategy> MOVEMENT_STRATEGIES;
 
+<<<<<<< HEAD
     public void moveCharacter(Character character, Class<? extends MovementStrategy> strategyClazz) throws IllegalStrategyException {
+=======
+    public void moveCharacter(Character character, Class<MovementStrategy> strategyClazz) throws IllegalStrategyException {
+>>>>>>> b3de19fd8f03b8c3b96ec324fecc529edb5bec23
         List<Class<? extends MovementStrategy>> validStrategies = character.getValidMovementStrategies();
         MovementStrategy strategy = MOVEMENT_STRATEGIES.get(strategyClazz);
         validateStrategy(strategy, strategyClazz);

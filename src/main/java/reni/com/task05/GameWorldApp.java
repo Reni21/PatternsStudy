@@ -1,6 +1,5 @@
 package reni.com.task05;
 
-import reni.com.task05.entity.*;
 import reni.com.task05.entity.Character;
 import reni.com.task05.exception.IllegalStrategyException;
 import reni.com.task05.service.CharacterService;
