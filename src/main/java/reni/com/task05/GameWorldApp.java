@@ -5,6 +5,7 @@ import reni.com.task05.entity.Character;
 import reni.com.task05.exception.IllegalStrategyException;
 import reni.com.task05.service.CharacterService;
 import reni.com.task05.strategy.*;
+import reni.com.task05.util.InitializerUtil;
 
 import java.util.*;
 
@@ -16,26 +17,25 @@ public class GameWorldApp {
     }
 
     public static void main(String[] args) {
-        List<Character> characters = initCharacters();
+        List<Character> characters = InitializerUtil.initCharacters();
         try (Scanner scanner = new Scanner(System.in)) {
             new GameWorldApp(new CharacterService()).runGameWorldApp(characters, scanner);
         }
     }
 
     private void runGameWorldApp(List<Character> characters, Scanner scanner) {
-        printCharactersList(characters);
+        System.out.println("Choose character:");
+        characters.forEach(character -> {
+                    int index = characters.indexOf(character);
+                    String characterClazz = character.getClass().getSimpleName();
+                    System.out.format("%d - %s %s%n", index, characterClazz, character.getName());
+                }
+        );
 
-        int inputCharacterNumber = -1;
         while (true) {
             try {
-                inputCharacterNumber = Integer.parseInt(scanner.nextLine());
-                characterService.moveCharacter(characters.get(inputCharacterNumber), scanner);
-
-            } catch (IndexOutOfBoundsException e) {
-                System.out.format("Missing character with such number \"%s\"%n", inputCharacterNumber);
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input format. Use only numbers for input.");
-            } catch (IllegalArgumentException e) {
+                getUserInput(characters, scanner);
+            } catch (IllegalArgumentException | UnsupportedOperationException e) {
                 System.out.println(e.getMessage());
             } catch (IllegalStrategyException e) {
                 e.printStackTrace();
@@ -45,40 +45,55 @@ public class GameWorldApp {
         }
     }
 
-    private void printCharactersList(List<Character> characters) {
-        System.out.println("Choose character:");
-        characters.forEach(character -> {
-                    int index = characters.indexOf(character);
-                    String characterClazz = character.getClass().getSimpleName();
-                    System.out.format("%d - %s %s%n", index, characterClazz, character.getName());
+    private void getUserInput(List<Character> characters, Scanner scanner) throws IllegalStrategyException {
+        int inputCharacterNumber = -1;
+        try {
+            inputCharacterNumber = Integer.parseInt(scanner.nextLine());
+            validateInputByRange(inputCharacterNumber, characters.size(), "characters");
+            Character character = characters.get(inputCharacterNumber);
+            List<Class<? extends MovementStrategy>> validStrategies = character.getValidMovementStrategies();
+            validateCharacterStrategies(validStrategies);
+
+            Class<? extends MovementStrategy> strategyClazz;
+            if (validStrategies.size() == 1) {
+                strategyClazz = validStrategies.get(0);
+            } else {
+                int inputStrategyNumber = getUserInputStrategyNum(validStrategies, scanner);
+                strategyClazz = validStrategies.get(inputStrategyNumber);
+            }
+            characterService.moveCharacter(character, strategyClazz);
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid input format. Use only numbers for input.");
+        }
+    }
+
+    private int getUserInputStrategyNum(List<Class<? extends MovementStrategy>> validStrategies, Scanner scanner) {
+        int numberOfMovementStrategies = validStrategies.size();
+        System.out.println("Choose number of character movement strategy:");
+        validStrategies.forEach(clazz -> {
+                    int index = validStrategies.indexOf(clazz);
+                    String strategyName = CharacterService.MOVEMENT_STRATEGIES.get(clazz).getSimpleName();
+                    System.out.format("%d - %s%n", index, strategyName);
                 }
         );
+
+        int strategyNum = Integer.parseInt(scanner.nextLine());
+        validateInputByRange(strategyNum, numberOfMovementStrategies, "strategy");
+        return strategyNum;
     }
 
-    private static List<Character> initCharacters() {
-        List<Character> characters = new LinkedList<>();
-        characters.add(new Vampire("Dracula", Arrays.asList(
-                RunMovementStrategy.class,
-                FlyingOnWingsMovementStrategy.class,
-                SimpleWalkingMovementStrategy.class)));
-        characters.add(new Wizard("Volan De Mort", Arrays.asList(
-                RunMovementStrategy.class,
-                MagicSwimmingMovementStrategy.class,
-                MagicFlyingMovementStrategy.class,
-                SimpleWalkingMovementStrategy.class,
-                HorseRidingMovementStrategy.class)));
-        characters.add(new Mermaid("Ursula", Arrays.asList(
-                SimpleSwimmingMovementStrategy.class)));
-        characters.add(new Troll("Butcher", Arrays.asList(
-                RunMovementStrategy.class,
-                SimpleWalkingMovementStrategy.class)));
-        characters.add(new Knight("Artur", Arrays.asList(
-                RunMovementStrategy.class,
-                SimpleSwimmingMovementStrategy.class,
-                SimpleWalkingMovementStrategy.class,
-                HorseRidingMovementStrategy.class)));
-        return characters;
+    private void validateInputByRange(int inputNumber, int requiredRange, String objectName){
+        if (inputNumber >= requiredRange || inputNumber < 0) {
+            throw new IllegalArgumentException(String.format("Missing %s with such number \"%s\"%n",objectName, inputNumber));
+        }
+
     }
 
+    private void validateCharacterStrategies(List<Class<? extends MovementStrategy>> validStrategies) {
+        if (validStrategies == null || validStrategies.isEmpty()) {
+            throw new UnsupportedOperationException("This character can not move.");
+        }
+    }
 
 }
