@@ -21,7 +21,7 @@ public class Subscriber implements PressSubscriber {
 
     @Override
     public void receivePress(Press press) {
-        System.out.println("Got new issue of " + press.getPressType());
+        System.out.format("%s got new issue of %s %s %n", name, press.getPressType(), press.getIssueName());
         presses.add(press);
     }
 }

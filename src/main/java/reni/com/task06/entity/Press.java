@@ -10,4 +10,6 @@ public abstract class Press {
     public PressType getPressType() {
         return pressType;
     }
+
+    public abstract String getIssueName();
 }
