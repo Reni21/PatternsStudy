@@ -29,7 +29,7 @@ public class PostOffice {
     }
 
     public void subscribe(PressType pressType, PressSubscriber subscriber) {
-        subscribers.compute(pressType, (type, subscribersList) -> {
+        subscribers.compute(pressType, (type, subscribersList) -> { //
             if (subscribersList == null) {
                 subscribersList = new ArrayList<>();
             }
