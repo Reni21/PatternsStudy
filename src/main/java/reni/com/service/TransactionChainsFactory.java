@@ -27,85 +27,6 @@ public class TransactionChainsFactory {
         return transactionStage;
     }
 
-    // Simple Payment chain
-    public static TransactionStage createWithdrawTransactionChainForSimplePayment() {
-        TransactionType withdraw = TransactionType.WITHDRAW;
-        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
-        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
-        TransactionStage transactionStage3 = new TaxWithdrawStage(withdraw);
-        TransactionStage transactionStage4 = new CashBackDepositStage(withdraw);
-        TransactionStage transactionStage5 = new SendEmailReportStage(withdraw);
-
-        transactionStage1.setNextStage(transactionStage2);
-        transactionStage2.setNextStage(transactionStage3);
-        transactionStage3.setNextStage(transactionStage4);
-        transactionStage4.setNextStage(transactionStage5);
-        return transactionStage1;
-    }
-
-    // Government Payment chain
-    public static TransactionStage createWithdrawTransactionChainForGovernmentPayment() {
-        TransactionType withdraw = TransactionType.WITHDRAW;
-        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
-        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
-        TransactionStage transactionStage3 = new TaxWithdrawStage(withdraw);
-        TransactionStage transactionStage4 = new SendEmailReportStage(withdraw);
-
-        transactionStage1.setNextStage(transactionStage2);
-        transactionStage2.setNextStage(transactionStage3);
-        transactionStage3.setNextStage(transactionStage4);
-        return transactionStage1;
-    }
-
-    // Inner Bank Payment chain
-    public static TransactionStage createWithdrawTransactionChainForInnerBankPayment() {
-        TransactionType withdraw = TransactionType.WITHDRAW;
-        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
-        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
-        TransactionStage transactionStage3 = new SendEmailReportStage(withdraw);
-
-        transactionStage1.setNextStage(transactionStage2);
-        transactionStage2.setNextStage(transactionStage3);
-        return transactionStage1;
-    }
-
-    // Preferential Payment chain
-    public static TransactionStage createWithdrawTransactionChainForPreferentialPayment() {
-        return createDepositTransactionChainForInnerBankPayment();
-    }
-
-    // Simple Payment chain
-    public static TransactionStage createDepositTypeTransactionChainForSimplePayment() {
-        TransactionType deposit = TransactionType.DEPOSIT;
-        TransactionStage transactionStage1 = new MainDepositOperationStage(deposit);
-        TransactionStage transactionStage2 = new SendEmailReportStage(deposit);
-
-        transactionStage1.setNextStage(transactionStage2);
-        return transactionStage1;
-    }
-
-    // Government Payment chain
-    public static TransactionStage createDepositTransactionChainForGovernmentPayment() {
-        TransactionType deposit = TransactionType.DEPOSIT;
-        TransactionStage transactionStage1 = new MainDepositOperationStage(deposit);
-        TransactionStage transactionStage2 = new TaxWithdrawStage(deposit);
-        TransactionStage transactionStage3 = new SendEmailReportStage(deposit);
-
-        transactionStage1.setNextStage(transactionStage2);
-        transactionStage2.setNextStage(transactionStage3);
-        return transactionStage1;
-    }
-
-    // Inner Bank Payment chain
-    public static TransactionStage createDepositTransactionChainForInnerBankPayment() {
-        return createDepositTypeTransactionChainForSimplePayment();
-    }
-
-    // Preferential Payment chain
-    public static TransactionStage createDepositTransactionChainForPreferentialPayment() {
-        return createDepositTypeTransactionChainForSimplePayment();
-    }
-
     private static TransactionStage createTransactionChainForSimplePayment(TransactionType transactionType) {
         if (transactionType.equals(TransactionType.DEPOSIT)) {
             return TransactionChainsFactory.createDepositTypeTransactionChainForSimplePayment();
@@ -144,6 +65,85 @@ public class TransactionChainsFactory {
             return TransactionChainsFactory.createWithdrawTransactionChainForPreferentialPayment();
         }
         throw new IllegalArgumentException("Incorrect transaction type: " + transactionType);
+    }
+
+    // Simple Payment chain
+    private static TransactionStage createWithdrawTransactionChainForSimplePayment() {
+        TransactionType withdraw = TransactionType.WITHDRAW;
+        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
+        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
+        TransactionStage transactionStage3 = new TaxWithdrawStage(withdraw);
+        TransactionStage transactionStage4 = new CashBackDepositStage(withdraw);
+        TransactionStage transactionStage5 = new SendEmailReportStage(withdraw);
+
+        transactionStage1.setNextStage(transactionStage2);
+        transactionStage2.setNextStage(transactionStage3);
+        transactionStage3.setNextStage(transactionStage4);
+        transactionStage4.setNextStage(transactionStage5);
+        return transactionStage1;
+    }
+
+    // Government Payment chain
+    private static TransactionStage createWithdrawTransactionChainForGovernmentPayment() {
+        TransactionType withdraw = TransactionType.WITHDRAW;
+        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
+        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
+        TransactionStage transactionStage3 = new TaxWithdrawStage(withdraw);
+        TransactionStage transactionStage4 = new SendEmailReportStage(withdraw);
+
+        transactionStage1.setNextStage(transactionStage2);
+        transactionStage2.setNextStage(transactionStage3);
+        transactionStage3.setNextStage(transactionStage4);
+        return transactionStage1;
+    }
+
+    // Inner Bank Payment chain
+    private static TransactionStage createWithdrawTransactionChainForInnerBankPayment() {
+        TransactionType withdraw = TransactionType.WITHDRAW;
+        TransactionStage transactionStage1 = new BalanceValidationStage(withdraw);
+        TransactionStage transactionStage2 = new MainWithdrawOperationStage(withdraw);
+        TransactionStage transactionStage3 = new SendEmailReportStage(withdraw);
+
+        transactionStage1.setNextStage(transactionStage2);
+        transactionStage2.setNextStage(transactionStage3);
+        return transactionStage1;
+    }
+
+    // Preferential Payment chain
+    private static TransactionStage createWithdrawTransactionChainForPreferentialPayment() {
+        return createDepositTransactionChainForInnerBankPayment();
+    }
+
+    // Simple Payment chain
+    private static TransactionStage createDepositTypeTransactionChainForSimplePayment() {
+        TransactionType deposit = TransactionType.DEPOSIT;
+        TransactionStage transactionStage1 = new MainDepositOperationStage(deposit);
+        TransactionStage transactionStage2 = new SendEmailReportStage(deposit);
+
+        transactionStage1.setNextStage(transactionStage2);
+        return transactionStage1;
+    }
+
+    // Government Payment chain
+    private static TransactionStage createDepositTransactionChainForGovernmentPayment() {
+        TransactionType deposit = TransactionType.DEPOSIT;
+        TransactionStage transactionStage1 = new MainDepositOperationStage(deposit);
+        TransactionStage transactionStage2 = new TaxWithdrawStage(deposit);
+        TransactionStage transactionStage3 = new SendEmailReportStage(deposit);
+
+        transactionStage1.setNextStage(transactionStage2);
+        transactionStage2.setNextStage(transactionStage3);
+        return transactionStage1;
+    }
+
+    // Inner Bank Payment chain
+    private static TransactionStage createDepositTransactionChainForInnerBankPayment() {
+        return createDepositTypeTransactionChainForSimplePayment();
+    }
+
+    // Preferential Payment chain
+    private static TransactionStage createDepositTransactionChainForPreferentialPayment() {
+        return createDepositTypeTransactionChainForSimplePayment();
     }
 
 }
