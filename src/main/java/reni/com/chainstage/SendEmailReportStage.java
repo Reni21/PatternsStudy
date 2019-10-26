@@ -17,10 +17,6 @@ public class SendEmailReportStage extends TransactionStage {
     protected void executeStage(Transaction transaction) throws TransactionStageRejectException {
         System.out.println("Send email stage execute...");
         Account account = transaction.getAccount();
-        validateNotNull(account, "Account");
-
-        String userEmail = account.getUserEmail();
-        validateNotEmpty(userEmail, "User Email", account.getNumber());
         System.out.format("Send report to email=%s: %s operation was performed on the account %s on amount %d USD.%n",
                 account.getUserEmail(),
                 transaction.getTransactionType(),

@@ -16,8 +16,6 @@ public class MainDepositOperationStage extends TransactionStage {
     protected void executeStage(Transaction transaction) throws TransactionStageRejectException {
         System.out.println("Main deposit operation stage execute...");
         Account account = transaction.getAccount();
-        validateNotNull(account, "Account");
-
         long newBalance = account.getBalance() + transaction.getAmount();
         account.setBalance(newBalance);
         executeNextStage(transaction);

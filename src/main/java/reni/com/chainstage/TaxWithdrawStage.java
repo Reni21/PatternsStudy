@@ -16,13 +16,11 @@ public class TaxWithdrawStage extends TransactionStage {
     protected void executeStage(Transaction transaction) throws TransactionStageRejectException {
         System.out.println("Withdraw tax stage execute...");
         long tax = transaction.getTax();
-        if(tax > 0) {
+        if (tax > 0) {
             Account account = transaction.getAccount();
-            validateNotNull(account, "Account");
-
             long taxAmount = transaction.getAmount() / 100 * transaction.getTax();
             long balance = account.getBalance();
-            if(balance < taxAmount ) {
+            if (balance < taxAmount) {
                 throw new TransactionStageRejectException("Not enough money in account: " + account.getNumber());
             }
             account.setBalance(balance - taxAmount);

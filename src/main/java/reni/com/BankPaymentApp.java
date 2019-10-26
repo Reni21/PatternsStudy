@@ -29,7 +29,7 @@ public class BankPaymentApp {
 
         transactionService.handlePayment(PaymentType.SIMPLE, transaction1);
         System.out.println("===========================================================================================================");
-        transactionService.handlePayment(PaymentType.SIMPLE, transaction2);
+        transactionService.handlePayment(PaymentType.INNER_BANK, transaction2);
         System.out.println("===========================================================================================================");
 
         System.out.println(account1);

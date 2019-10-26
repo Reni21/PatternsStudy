@@ -16,7 +16,6 @@ public class CashBackDepositStage extends TransactionStage {
     protected void executeStage(Transaction transaction) throws TransactionStageRejectException {
         System.out.println("Deposit cash back stage execute...");
         Account account = transaction.getAccount();
-        validateNotNull(account, "Account");
 
         long cashBackPercent = account.getCashBackPercent();
         if (cashBackPercent > 0) {

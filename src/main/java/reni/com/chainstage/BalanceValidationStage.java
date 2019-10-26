@@ -16,11 +16,10 @@ public class BalanceValidationStage extends TransactionStage {
     protected void executeStage(Transaction transaction) throws TransactionStageRejectException {
         System.out.println("Balance validation stage execute...");
         Account account = transaction.getAccount();
-        validateNotNull(account, "Account");
 
         long balance = account.getBalance();
         long amount = transaction.getAmount();
-        if(balance < amount ) {
+        if (balance < amount) {
             throw new TransactionStageRejectException("Not enough money in account: " + account.getNumber());
         } else {
             executeNextStage(transaction);

@@ -17,7 +17,7 @@ public abstract class TransactionStage {
     private TransactionStage nextStage;
 
     public void runTransactionStage(Transaction transaction) throws TransactionStageRejectException {
-        validateNotNull(transaction, "Transaction");
+        validateTransaction(transaction);
         if (this.supportedTransactionType.equals(transaction.getTransactionType())) {
             executeStage(transaction);
         }
@@ -31,19 +31,12 @@ public abstract class TransactionStage {
 
     protected abstract void executeStage(Transaction transaction) throws TransactionStageRejectException;
 
-    void validateNotEmpty(String field, String fieldName, String accountNumber) {
-        if (field == null || field.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Exception in account: " + accountNumber +
-                    "Required field is absent or equals null: " + fieldName
-            );
+    private void validateTransaction(Transaction transaction) {
+        if (transaction == null) {
+            throw new IllegalArgumentException("Transaction must be provided");
+        }
+        if (transaction.getAccount() == null) {
+            throw new IllegalArgumentException("Account must be provided");
         }
     }
-
-    void validateNotNull(Object field, String fieldName) {
-        if (field == null) {
-            throw new IllegalArgumentException("Required field equals null: " + fieldName);
-        }
-    }
-
 }
