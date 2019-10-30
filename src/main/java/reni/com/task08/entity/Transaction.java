@@ -1,4 +1,4 @@
-package reni.com.entity;
+package reni.com.task08.entity;
 
 import lombok.Getter;
 import lombok.NonNull;

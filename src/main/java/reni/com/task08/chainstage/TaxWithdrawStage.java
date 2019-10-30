@@ -1,9 +1,9 @@
-package reni.com.chainstage;
+package reni.com.task08.chainstage;
 
-import reni.com.entity.Account;
-import reni.com.entity.Transaction;
-import reni.com.entity.TransactionType;
-import reni.com.exception.TransactionStageRejectException;
+import reni.com.task08.entity.Account;
+import reni.com.task08.entity.Transaction;
+import reni.com.task08.entity.TransactionType;
+import reni.com.task08.exception.TransactionStageRejectException;
 
 
 public class TaxWithdrawStage extends TransactionStage {

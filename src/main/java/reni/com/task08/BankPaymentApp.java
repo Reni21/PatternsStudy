@@ -1,9 +1,9 @@
-package reni.com;
+package reni.com.task08;
 
 import lombok.AllArgsConstructor;
-import reni.com.entity.*;
-import reni.com.exception.TransactionStageRejectException;
-import reni.com.service.TransactionService;
+import reni.com.task08.entity.*;
+import reni.com.task08.exception.TransactionStageRejectException;
+import reni.com.task08.service.TransactionService;
 
 @AllArgsConstructor
 public class BankPaymentApp {
