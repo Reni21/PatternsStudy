@@ -10,7 +10,7 @@ public class Wikipedia {
 
     public void addArticle(Article article) {
         validateArticle(article, Action.ADD);
-        checkIsTitleExist(article.getTitle());
+        checkTitleIsUnique(article.getTitle());
 
         int id = article.getId();
         articles.put(id, article);
@@ -18,7 +18,7 @@ public class Wikipedia {
     }
 
     public Article getArticleById(int id) {
-        checkIsIdNotExist(id);
+        checkIdExists(id);
         return articles.get(id).copy();
     }
 
@@ -30,11 +30,11 @@ public class Wikipedia {
         Article currentVersion = articles.get(id);
         String currentTitle = currentVersion.getTitle();
         if (!newTitle.equals(currentTitle)) {
-            checkIsTitleExist(newTitle);
+            checkTitleIsUnique(newTitle);
+            currentVersion.setTitle(newTitle);
         }
         Article versionForArchive = currentVersion.copy();
 
-        currentVersion.setTitle(newTitle);
         currentVersion.setContent(article.getContent());
 
         Stack<Article> archive = reserveCopiesArchive.get(id);
@@ -48,7 +48,7 @@ public class Wikipedia {
 
 
     public void resetLastChangesInArticleById(int id) {
-        checkIsIdNotExist(id);
+        checkIdExists(id);
 
         Stack<Article> archive = reserveCopiesArchive.get(id);
         if (archive == null || archive.empty()) {
@@ -70,8 +70,8 @@ public class Wikipedia {
         int id = article.getId();
 
         switch (action) {
-            case ADD: checkIsIdExist(id); break;
-            case UPDATE: checkIsIdNotExist(id); break;
+            case ADD: checkIdIsUnique(id); break;
+            case UPDATE: checkIdExists(id); break;
             default: throw new IllegalArgumentException("Unknown action");
         }
 
@@ -81,19 +81,19 @@ public class Wikipedia {
         }
     }
 
-    private void checkIsIdNotExist(int id) {
+    private void checkIdExists(int id) {
         if (!articles.containsKey(id)) {
             throw new IllegalArgumentException("Article with such id does not exist: id=" + id);
         }
     }
 
-    private void checkIsIdExist(int id) {
+    private void checkIdIsUnique(int id) {
         if (articles.containsKey(id)) {
             throw new IllegalArgumentException("Article with such id is already exist: id=" + id);
         }
     }
 
-    private void checkIsTitleExist(String title) {
+    private void checkTitleIsUnique(String title) {
         articles.values().forEach(value -> {
             if (title.equals(value.getTitle())) {
                 throw new IllegalArgumentException("Article with such title is already exist: title=" + title);
