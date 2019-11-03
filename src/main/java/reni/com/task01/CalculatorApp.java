@@ -21,7 +21,7 @@ public class CalculatorApp {
             try {
                 System.out.println(msg);
                 String input = scanner.nextLine(); // = (1+2)*4+5*(3+6)
-                MathExpression expression = MathExpressionParser.parseString(input);
+                MathExpression expression = MathExpressionParser.parseExpression(input);
                 double result = expression.calculate(); // = 57.0
                 System.out.println(input + "=" + result);
                 System.out.println();

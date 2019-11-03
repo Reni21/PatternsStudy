@@ -2,27 +2,28 @@ package reni.com.task01.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class ReversePolishNotation {
     private static final String EXTRACT_SINGLE_TOKENS_REGEX = "(?<=[-+*/()])|(?=[-+*/()])";
 
-    public static ArrayList<String> createRpnFromStringsTokens(String mathExpression) {
+    public static List<String> createRpnFromStringsTokens(String mathExpression) {
         String[] tokens = mathExpression.split(EXTRACT_SINGLE_TOKENS_REGEX);
 
-        ArrayList<String> operatorsBuff = new ArrayList<>();
-        ArrayList<String> tokensInRpnOrder = new ArrayList<>();
+        List<String> operatorsBuff = new ArrayList<>();
+        List<String> tokensInRpnOrder = new ArrayList<>();
 
         Arrays.stream(tokens).forEach(token -> putTokenIntoCorrectPlace(token, operatorsBuff, tokensInRpnOrder));
 
         int border = operatorsBuff.size();
         IntStream.range(0, border)
                 .map(i -> border - i - 1)
-                .forEach(i -> transferTokensFromBuff(tokensInRpnOrder, operatorsBuff, i));
+                .forEach(i -> transferTokenFromBuff(tokensInRpnOrder, operatorsBuff, i));
         return tokensInRpnOrder;
     }
 
-    private static void putTokenIntoCorrectPlace(String token, ArrayList<String> operatorsBuff, ArrayList<String> tokensInRpnOrder) {
+    private static void putTokenIntoCorrectPlace(String token, List<String> operatorsBuff, List<String> tokensInRpnOrder) {
         int lastOperatorIndex = operatorsBuff.size() - 1;
         switch (token) {
             case "(":
@@ -30,7 +31,7 @@ public class ReversePolishNotation {
                 break;
             case ")":
                 while (!"(".equals(operatorsBuff.get(lastOperatorIndex))) {
-                    transferTokensFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
+                    transferTokenFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
                     lastOperatorIndex--;
                 }
                 operatorsBuff.remove(lastOperatorIndex);
@@ -40,10 +41,10 @@ public class ReversePolishNotation {
                 if (lastOperatorIndex >= 0) {
                     String lastOperator = operatorsBuff.get(lastOperatorIndex);
                     if ("-".equals(lastOperator) || "+".equals(lastOperator)) {
-                        transferTokensFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
+                        transferTokenFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
                         operatorsBuff.add(token);
                     } else {
-                        findPlaceForOperator(token, operatorsBuff, tokensInRpnOrder);
+                        putTokenIntoCorrectPlaceHelper(token, operatorsBuff, tokensInRpnOrder);
                     }
                 } else {
                     operatorsBuff.add(token);
@@ -51,20 +52,20 @@ public class ReversePolishNotation {
                 break;
             case "*":
             case "/":
-                    findPlaceForOperator(token, operatorsBuff, tokensInRpnOrder);
+                putTokenIntoCorrectPlaceHelper(token, operatorsBuff, tokensInRpnOrder);
                 break;
             default:
                 tokensInRpnOrder.add(token);
         }
     }
 
-    private static void findPlaceForOperator(String token, ArrayList<String> operatorsBuff, ArrayList<String> tokensInRpnOrder) {
+    private static void putTokenIntoCorrectPlaceHelper(String token, List<String> operatorsBuff, List<String> tokensInRpnOrder) {
         int lastOperatorIndex = operatorsBuff.size() - 1;
         if (lastOperatorIndex >= 0) {
             String lastOperator = operatorsBuff.get(lastOperatorIndex);
 
             if ("*".equals(lastOperator) || "/".equals(lastOperator)) {
-                transferTokensFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
+                transferTokenFromBuff(tokensInRpnOrder, operatorsBuff, lastOperatorIndex);
                 operatorsBuff.add(token);
             } else {
                 operatorsBuff.add(token);
@@ -74,8 +75,8 @@ public class ReversePolishNotation {
         }
     }
 
-    private static void transferTokensFromBuff(ArrayList<String> tokensInRpnOrder,
-                                               ArrayList<String> operatorsBuff, int lastTokenIndex) {
+    private static void transferTokenFromBuff(List<String> tokensInRpnOrder,
+                                              List<String> operatorsBuff, int lastTokenIndex) {
         tokensInRpnOrder.add(operatorsBuff.get(lastTokenIndex));
         operatorsBuff.remove(lastTokenIndex);
     }

@@ -3,17 +3,18 @@ package reni.com.task01.util;
 import reni.com.task01.composite.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MathExpressionParser {
 
-    public static MathExpression parseString(String mathExpression) {
-        ArrayList<String> tokensInRpnOrder = ReversePolishNotation.createRpnFromStringsTokens(mathExpression);
+    public static MathExpression parseExpression(String mathExpression) {
+        List<String> tokensInRpnOrder = ReversePolishNotation.createRpnFromStringsTokens(mathExpression);
         return buildExpressionsTree(tokensInRpnOrder);
     }
 
-    private static MathExpression buildExpressionsTree(ArrayList<String> tokensInRpnOrder) {
-        ArrayList<MathExpression> accumulatedResult = new ArrayList<>();
+    private static MathExpression buildExpressionsTree(List<String> tokensInRpnOrder) {
+        List<MathExpression> accumulatedResult = new ArrayList<>();
         for (String token : tokensInRpnOrder) {
             switch (token) {
                 case "-":
@@ -22,7 +23,7 @@ public class MathExpressionParser {
                 case "/":
                     MathExpression left = accumulatedResult.get(accumulatedResult.size() - 2);
                     MathExpression right = accumulatedResult.get(accumulatedResult.size() - 1);
-                    MathExpression result = expressionBuilder(left, right, token);
+                    MathExpression result = buildExpression(left, right, token);
 
                     accumulatedResult.remove(accumulatedResult.size() - 1);
                     accumulatedResult.remove(accumulatedResult.size() - 1);
@@ -35,7 +36,7 @@ public class MathExpressionParser {
         return accumulatedResult.get(0);
     }
 
-    private static MathExpression expressionBuilder(MathExpression left, MathExpression right, String operator) {
+    private static MathExpression buildExpression(MathExpression left, MathExpression right, String operator) {
         switch (operator) {
             case "-":
                 return new Subtraction(left, right);
