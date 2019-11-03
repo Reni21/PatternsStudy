@@ -2,7 +2,7 @@ package reni.com.task07.state;
 
 import reni.com.task07.entity.GrantRequest;
 
-public class RejectedGrantRequestState implements reni.com.task07.state.GrantRequestState {
+public class RejectedGrantRequestState implements GrantRequestState {
     @Override
     public boolean isPaymentAvailable() {
         return false;
