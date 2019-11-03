@@ -1,7 +1,6 @@
 package com.reni.task03;
 
 import com.reni.task03.entity.Article;
-import com.reni.task03.entity.Wikipedia;
 
 public class ArticleApp {
     private static Wikipedia wikipedia = new Wikipedia();

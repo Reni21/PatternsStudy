@@ -1,4 +1,6 @@
-package com.reni.task03.entity;
+package com.reni.task03;
+
+import com.reni.task03.entity.Article;
 
 import java.util.*;
 
