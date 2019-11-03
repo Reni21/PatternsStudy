@@ -9,7 +9,7 @@ public class Wikipedia {
     private Map<Integer, Stack<Article>> reserveCopiesArchive = new HashMap<>();
 
     public void addArticle(Article article) {
-        validateArticle(article, "add");
+        validateArticle(article, Action.ADD);
         checkIsTitleExist(article.getTitle());
 
         int id = article.getId();
@@ -23,13 +23,13 @@ public class Wikipedia {
     }
 
     public void updateArticle(Article article) {
-        validateArticle(article, "update");
+        validateArticle(article, Action.UPDATE);
         int id = article.getId();
         String newTitle = article.getTitle();
 
         Article currentVersion = articles.get(id);
         String currentTitle = currentVersion.getTitle();
-        if (!newTitle.equals(currentTitle)){
+        if (!newTitle.equals(currentTitle)) {
             checkIsTitleExist(newTitle);
         }
         Article versionForArchive = currentVersion.copy();
@@ -63,23 +63,20 @@ public class Wikipedia {
         System.out.println("Last changes of article with id=" + id + " was reset");
     }
 
-    private void validateArticle(Article article, String action){
-        if(article == null) {
+    private void validateArticle(Article article, Action action) {
+        if (article == null) {
             throw new IllegalArgumentException("Article is null");
         }
         int id = article.getId();
 
-        if ("add".equals(action)){
-            if (articles.containsKey(id)) {
-                throw new IllegalArgumentException("Article with such id is already exist: id=" + id);
-            }
-        }
-        if ("update".equals(action)){
-            checkIsIdNotExist(id);
+        switch (action) {
+            case ADD: checkIsIdExist(id); break;
+            case UPDATE: checkIsIdNotExist(id); break;
+            default: throw new IllegalArgumentException("Unknown action");
         }
 
         String title = article.getTitle();
-        if(title == null || title.isEmpty()) {
+        if (title == null || title.isEmpty()) {
             throw new IllegalArgumentException("Articles title is null");
         }
     }
@@ -90,12 +87,22 @@ public class Wikipedia {
         }
     }
 
+    private void checkIsIdExist(int id) {
+        if (articles.containsKey(id)) {
+            throw new IllegalArgumentException("Article with such id is already exist: id=" + id);
+        }
+    }
+
     private void checkIsTitleExist(String title) {
         articles.values().forEach(value -> {
-            if(title.equals(value.getTitle())){
+            if (title.equals(value.getTitle())) {
                 throw new IllegalArgumentException("Article with such title is already exist: title=" + title);
             }
         });
+    }
+
+    private enum Action {
+        ADD, UPDATE
     }
 
 }
