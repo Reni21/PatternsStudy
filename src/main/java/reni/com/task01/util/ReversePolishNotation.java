@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 public class ReversePolishNotation {
-    private static final String EXTRACT_SINGLE_ELEMENTS_REGEX = "(?<=[-+*/()])|(?=[-+*/()])";
+    private static final String EXTRACT_SINGLE_TOKENS_REGEX = "(?<=[-+*/()])|(?=[-+*/()])";
 
     public static ArrayList<String> createRpnFromStringsTokens(String mathExpression) {
-        String[] tokens = mathExpression.split(EXTRACT_SINGLE_ELEMENTS_REGEX);
+        String[] tokens = mathExpression.split(EXTRACT_SINGLE_TOKENS_REGEX);
 
         ArrayList<String> operatorsBuff = new ArrayList<>();
         ArrayList<String> tokensInRpnOrder = new ArrayList<>();
