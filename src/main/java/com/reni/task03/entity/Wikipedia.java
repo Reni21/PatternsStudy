@@ -78,7 +78,7 @@ public class Wikipedia {
 
         String title = article.getTitle();
         if(title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Required field is null");
+            throw new IllegalArgumentException("Articles title is null");
         }
     }
 
